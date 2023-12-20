@@ -64,7 +64,7 @@ export const sendMultiModalPromptWithImage = async (
   photos: string[]
 ) => {
   try {
-    if (!prompt) {
+    if (!prompt || !photos.length) {
       throw new Error("Prompt is required");
     }
     const model = "gemini-pro-vision";
@@ -107,7 +107,7 @@ export const sendMultiModalPromptWithImage = async (
     const fullTextResponse =
       aggregatedResponse.candidates[0].content.parts[0].text;
 
-    console.log(fullTextResponse);
+    return fullTextResponse;
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(error.message);
