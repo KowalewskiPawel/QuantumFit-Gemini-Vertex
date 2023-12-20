@@ -1,0 +1,1 @@
+export { geminiRouter } from "./gemini.router";
