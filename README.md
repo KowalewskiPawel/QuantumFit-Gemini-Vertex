@@ -49,7 +49,18 @@ Body:
 
 ```json
 {
-  "text": "This is a sample text"
+  "prompt": "This is a sample text"
+}
+```
+
+- POST /api/v1/gemini/image - To analyze image ONLY PNG images are supported
+
+Body:
+
+```json
+{
+   "prompt": "This is a sample text",
+  "photos": ["imageurl"]
 }
 ```
 
