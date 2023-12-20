@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./src/index.js",
-    "dev": "nodemon",
-    "build": "tsc"
+    "start": "GOOGLE_APPLICATION_CREDENTIALS=/app/gcp.json node ./src/index.js",
+    "dev": "GOOGLE_APPLICATION_CREDENTIALS=/app/gcp.json nodemon",
+    "build": "echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > /app/gcp.json && tsc"
   },
   "author": "",
   "license": "ISC",
