@@ -1,10 +1,17 @@
-import { VertexAI } from "@google-cloud/vertexai";
+import { Part, VertexAI } from "@google-cloud/vertexai";
 import dotenv from "dotenv";
 
 dotenv.config();
 
 const projectId = process.env.PROJECT_ID as string;
 const location = process.env.LOCATION as string;
+
+async function getBase64(url: string) {
+  const response = await fetch(url);
+  const arrayBuffer = await response.arrayBuffer();
+  const base64 = Buffer.from(arrayBuffer).toString("base64");
+  return base64;
+}
 
 export const createNonStreamingSinglePartContent = async (prompt: string) => {
   try {
@@ -48,6 +55,63 @@ export const createNonStreamingSinglePartContent = async (prompt: string) => {
     if (error instanceof Error) {
       throw new Error(error.message);
     }
-    throw new Error('Something went wrong in Gemini AI');
+    throw new Error("Something went wrong in Gemini AI");
+  }
+};
+
+export const sendMultiModalPromptWithImage = async (
+  prompt: string,
+  photos: string[]
+) => {
+  try {
+    if (!prompt) {
+      throw new Error("Prompt is required");
+    }
+    const model = "gemini-pro-vision";
+    // For images, the SDK supports base64 strings
+    const base64Photos = await Promise.all(photos.map(getBase64));
+    const photosParts = base64Photos.map((photo) => ({
+      inlineData: {
+        data: photo,
+        mimeType: "image/png",
+      },
+    }));
+    // Initialize Vertex with your Cloud project and location
+    const vertexAI = new VertexAI({ project: projectId, location: location });
+
+    const generativeVisionModel = vertexAI.preview.getGenerativeModel({
+      model,
+    });
+
+    const textPart = {
+      text: prompt,
+    };
+
+    const requestsParts = [textPart, ...photosParts];
+
+    // Pass multimodal prompt
+    const request = {
+      contents: [
+        {
+          role: "user",
+          parts: requestsParts as unknown as Part[],
+        },
+      ],
+    };
+
+    // Create the response
+    const response = await generativeVisionModel.generateContent(request);
+    // Wait for the response to complete
+    const aggregatedResponse = await response.response;
+    // Select the text from the response
+    const fullTextResponse =
+      aggregatedResponse.candidates[0].content.parts[0].text;
+
+    console.log(fullTextResponse);
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("Something went wrong in Gemini AI");
   }
 };
