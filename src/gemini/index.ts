@@ -115,3 +115,62 @@ export const sendMultiModalPromptWithImage = async (
     throw new Error("Something went wrong in Gemini AI");
   }
 };
+
+export const sendMultiModalPromptWithVideo = async (
+  prompt: string,
+  videoUrl: string,
+  fileType: string
+) => {
+  try {
+    if (!prompt || !videoUrl || !fileType) {
+      throw new Error("Prompt, Video URL, and File Type are required");
+    }
+    const model = "gemini-pro-vision";
+
+    // Initialize Vertex with your Cloud project and location
+    const vertexAI = new VertexAI({ project: projectId, location: location });
+
+    const generativeVisionModel = vertexAI.preview.getGenerativeModel({
+      model,
+    });
+
+    const videoBase64 = await getBase64(videoUrl);
+
+    const videoPart = {
+      inlineData: {
+        data: videoBase64,
+        mimeType: fileType,
+      },
+    };
+    
+    const textPart = {
+      text: prompt,
+    };
+
+    const requestsParts = [textPart, videoPart];
+
+    const request = {
+      contents: [
+        {
+          role: "user",
+          parts: requestsParts as unknown as Part[],
+        },
+      ],
+    };
+
+    // Create the response
+    const response = await generativeVisionModel.generateContent(request);
+    // Wait for the response to complete
+    const aggregatedResponse = await response.response;
+    // Select the text from the response
+    const fullTextResponse =
+      aggregatedResponse.candidates[0].content.parts[0].text;
+
+    return fullTextResponse;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("Something went wrong in Gemini AI");
+  }
+};
