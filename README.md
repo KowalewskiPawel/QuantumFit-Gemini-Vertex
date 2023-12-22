@@ -12,7 +12,7 @@ This is a simple Node.js Express powered web service, to leverage the Gemini API
 
 | | |
 | - |- |
-| ![Screenshot of our QuantumFit App](/src/assets/logoEntry.png "Screenshot of our QuantumFit App") | Introducing QuantumFit! A revolutionary fitness app using the power of AI to help you physically become a better version of yourself! |
+| ![Screenshot of our QuantumFit App](/logoEntry.png "Screenshot of our QuantumFit App") | Introducing QuantumFit! A revolutionary fitness app using the power of AI to help you physically become a better version of yourself! |
 
 Our experts in artificial intelligence have helped design an intelligent gym companion that goes beyond conventional personal training. Our team is driven by the belief that everyone deserves access to a customized, effective, and personalized workout routine without the need for a dedicated trainer. Imagine the experience of a personal trainer in an app that completely adapts to your individual needs, requirements, fitness ability and goals.
 
