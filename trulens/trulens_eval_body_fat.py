@@ -11,19 +11,21 @@ tru.reset_database()
 
 # Custom class to instrument
 
-def gemini_pro_text(prompt):
+def gemini_pro_image(prompt, image_url):
     data = {
             "prompt": prompt,
+            "photos": [image_url]
         }
 
         # Adjust the URL accordingly
-    url = "http://localhost:8080/api/v1/gemini/text"
+    url = "http://localhost:8080/api/v1/gemini/image"
 
         # Make a POST request to the backend
     response = requests.post(url, json=data)
 
         # Check if the request was successful
     if response.status_code == 200:
+            # Assuming your backend returns the completion in JSON format
         completion = response.json()
         return completion['message']
     else:
@@ -32,14 +34,15 @@ def gemini_pro_text(prompt):
 
 class Gemini:
     @instrument
-    def complete(self, prompt):
+    def complete(self, prompt, image_url):
         # Backend expects JSON data
         data = {
             "prompt": prompt,
+            "photos": [image_url]
         }
 
         # Adjust the URL accordingly
-        url = "http://localhost:8080/api/v1/gemini/text"
+        url = "http://localhost:8080/api/v1/gemini/image"
 
         # Make a POST request to the backend
         response = requests.post(url, json=data)
@@ -54,23 +57,21 @@ class Gemini:
 
 gemini = Gemini()
 
-# Create a custom gemini feedback provider
+# custom gemini feedback provider
 class Gemini_Provider(Provider):
-    def sentence_completion(self, first_sentence_part) -> float:
-        result = float(gemini_pro_text(prompt = first_sentence_part)),
-        return result
+    def body_fat_analysis(self, image_prompt, image_to_analyze) -> float:
+        body_fat_result = float(gemini_pro_image(prompt = image_prompt, image_url = image_to_analyze).text),
+        return body_fat_result
 
 gemini_provider = Gemini_Provider()
 
-f_custom_function = Feedback(gemini_provider.sentence_completion, name = "Sentence Completion").on(Select.Record.calls[0].args.prompt)
-
-
-gemini_provider.sentence_completion(first_sentence_part = "Please complete this sentence: I love to eat ice cream because it's, and rate it from 1 to 5. Output: it as a pure number without anything else.")
+f_custom_function = Feedback(gemini_provider.body_fat_analysis, name = "Body Fat Analysis").on(Select.Record.calls[0].args.image_url)
 
 from trulens_eval import TruCustomApp
 tru_gemini = TruCustomApp(gemini, app_id = "gemini", feedbacks = [f_custom_function])
 
 with tru_gemini as recording:
     gemini.complete(
-    prompt="Please complete this sentence: I love to eat ice cream because it's, and rate it from 1 to 5. Output: it as a pure number without anything else.",
+    prompt="What is the body fat percentage of this person? Please express the result as a percentage. The output should be a number between 0 and 100.",
+    image_url=""
     )
