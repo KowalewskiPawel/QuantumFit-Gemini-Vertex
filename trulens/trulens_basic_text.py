@@ -1,4 +1,3 @@
-from trulens_eval import TruCustomApp
 from trulens_eval import Tru
 from trulens_eval.tru_custom_app import instrument
 from trulens_eval import Provider
@@ -12,7 +11,7 @@ tru.reset_database()
 
 # create a custom class to instrument
 
-def gemini_pro(prompt):
+def gemini_pro_text(prompt):
     data = {
             "prompt": prompt,
         }
@@ -60,7 +59,7 @@ gemini = Gemini()
 # create a custom gemini feedback provider
 class Gemini_Provider(Provider):
     def sentence_completion(self, first_sentence_part) -> float:
-        result = gemini_pro(prompt = first_sentence_part),
+        result = gemini_pro_text(prompt = first_sentence_part),
         return result
 
 gemini_provider = Gemini_Provider()
