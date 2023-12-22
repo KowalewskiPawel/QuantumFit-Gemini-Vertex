@@ -11,19 +11,22 @@ tru.reset_database()
 
 # Custom class to instrument
 
-def gemini_pro_text(prompt):
+def gemini_pro_video(prompt, video_url, file_type):
     data = {
             "prompt": prompt,
+            "videoUrl": video_url,
+            "fileType": file_type
         }
 
         # Adjust the URL accordingly
-    url = "http://localhost:8080/api/v1/gemini/text"
+    url = "http://localhost:8080/api/v1/gemini/video"
 
         # Make a POST request to the backend
     response = requests.post(url, json=data)
 
         # Check if the request was successful
     if response.status_code == 200:
+            # Assuming your backend returns the completion in JSON format
         completion = response.json()
         return completion['message']
     else:
@@ -32,14 +35,16 @@ def gemini_pro_text(prompt):
 
 class Gemini:
     @instrument
-    def complete(self, prompt):
+    def complete(self, prompt, video_url, file_type):
         # Backend expects JSON data
         data = {
             "prompt": prompt,
+            "videoUrl": video_url,
+            "fileType": file_type
         }
 
         # Adjust the URL accordingly
-        url = "http://localhost:8080/api/v1/gemini/text"
+        url = "http://localhost:8080/api/v1/gemini/video"
 
         # Make a POST request to the backend
         response = requests.post(url, json=data)
@@ -54,23 +59,22 @@ class Gemini:
 
 gemini = Gemini()
 
-# Create a custom gemini feedback provider
+# custom gemini feedback provider
 class Gemini_Provider(Provider):
-    def sentence_completion(self, first_sentence_part) -> float:
-        result = float(gemini_pro_text(prompt = first_sentence_part)),
-        return result
+    def exercise_video_analysis(self, video_prompt, video_to_analyze, video_file_type) -> float:
+        exercise_correctness_score = float(gemini_pro_video(prompt = video_prompt, video_url = video_to_analyze, file_type = video_file_type).text),
+        return exercise_correctness_score
 
 gemini_provider = Gemini_Provider()
 
-f_custom_function = Feedback(gemini_provider.sentence_completion, name = "Sentence Completion").on(Select.Record.calls[0].args.prompt)
-
-
-gemini_provider.sentence_completion(first_sentence_part = "Please complete this sentence: I love to eat ice cream because it's, and rate it from 1 to 5. Output: it as a pure number without anything else.")
+f_custom_function = Feedback(gemini_provider.exercise_video_analysis, name = "Exercise Analysis").on(Select.Record.calls[0].args.video_url)
 
 from trulens_eval import TruCustomApp
 tru_gemini = TruCustomApp(gemini, app_id = "gemini", feedbacks = [f_custom_function])
 
 with tru_gemini as recording:
     gemini.complete(
-    prompt="Please complete this sentence: I love to eat ice cream because it's, and rate it from 1 to 5. Output: it as a pure number without anything else.",
+    prompt="Rate the correctness of the exercise done in the video. The output should be a number between 0 and 100.",
+    video_url="",
+    file_type="video/mp4"
     )
