@@ -59,8 +59,8 @@ gemini = Gemini()
 
 # create a custom gemini feedback provider
 class Gemini_Provider(Provider):
-    def sentence_completion(self, description) -> float:
-        result = gemini_pro.complete(prompt = description),
+    def sentence_completion(self, first_sentence_part) -> float:
+        result = gemini_pro(prompt = first_sentence_part),
         return result
 
 gemini_provider = Gemini_Provider()
@@ -68,4 +68,4 @@ gemini_provider = Gemini_Provider()
 f_custom_function = Feedback(gemini_provider.sentence_completion, name = "Sentence Completion").on(Select.Record.calls[0].args.prompt)
 
 
-gemini_provider.sentence_completion(prompt = "Please complete this sentence: I love to eat ice cream because it's")
+gemini_provider.sentence_completion(first_sentence_part = "Please complete this sentence: I love to eat ice cream because it's")
