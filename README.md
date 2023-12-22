@@ -4,6 +4,24 @@
 
 This is a simple Node.js Express powered web service, to leverage the Gemini API with the use of VertexAI library.
 
+# Frontend Repository
+
+[QuantumFit Frontend](https://github.com/KowalewskiPawel/QuantumFit)
+
+# Quantum Fit
+
+| | |
+| - |- |
+| ![Screenshot of our QuantumFit App](/src/assets/logoEntry.png "Screenshot of our QuantumFit App") | Introducing QuantumFit! A revolutionary fitness app using the power of AI to help you physically become a better version of yourself! |
+
+Our experts in artificial intelligence have helped design an intelligent gym companion that goes beyond conventional personal training. Our team is driven by the belief that everyone deserves access to a customized, effective, and personalized workout routine without the need for a dedicated trainer. Imagine the experience of a personal trainer in an app that completely adapts to your individual needs, requirements, fitness ability and goals.
+
+Start by uploading several photos of yourself to get a fully customized body analysis breakdown to see where your body is lacking and could be improved. Then you can create a custom tailored workout plan that will help you meet your weight and healthy lifestyle goals. If that isn't enough, we also provide you with a complete weekly meal plan that can be adjusted to fit your dietary needs. This is enough to get you started and going on your fitness journey.
+
+Then comes the best part. Now sure what you are doing or unsure if your form is correct? Our real-time feedback video analyzer will let you take a short video of yourself doing an exercise and our intelligent AI will let you know if your form is off or if you are doing the exercise incorrectly.
+
+Make sure to check out QuantumFit today, so we can help you on your journey towards a healthier lifestyle and fitter body.
+
 ## Getting Started
 
 ### Prerequisites
