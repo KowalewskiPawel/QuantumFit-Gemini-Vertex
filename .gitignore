@@ -3,3 +3,5 @@
 .env.local
 
 gcp.json
+
+/trulens/default.sqlite
