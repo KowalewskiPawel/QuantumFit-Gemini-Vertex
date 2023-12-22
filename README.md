@@ -22,6 +22,10 @@ Then comes the best part. Now sure what you are doing or unsure if your form is 
 
 Make sure to check out QuantumFit today, so we can help you on your journey towards a healthier lifestyle and fitter body.
 
+# Architecture
+
+<img src="./quantum_fit_architecture.jpg" />
+
 ## Getting Started
 
 ### Prerequisites
