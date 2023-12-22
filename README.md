@@ -57,6 +57,16 @@ Make sure to check out QuantumFit today, so we can help you on your journey towa
 npm run dev
 ```
 
+# TruLens
+
+TruLens implementation can be found in the `/TruLens` directory. It works as a standalone service and can be started with the following command:
+
+```sh
+python3 <name_of_file>.py
+```
+
+Gemini AI is built in as custom provider, that instead using the Google Cloud API, it uses post requests to the local backend that is running on port 8080.
+
 ### Test the service
 
 You can use Postman to test the service. The service has the following endpoints:
@@ -79,6 +89,18 @@ Body:
 {
    "prompt": "This is a sample text",
   "photos": ["imageurl"]
+}
+```
+
+- POST /api/v1/gemini/video - To analyze video
+
+Body:
+
+```json
+{
+  "prompt": "This is a sample text",
+  "video": "videourl",
+  "fileType": "video/mp4"
 }
 ```
 
