@@ -23,6 +23,8 @@ gemini_pro = Vertex(
 
 tru = Tru()
 tru.reset_database()
+  # Run the TruLens dashboard.
+tru.run_dashboard(port=8024)
 
 
 # create a custom class to instrument
@@ -38,9 +40,12 @@ gemini = Gemini()
 
 class Gemini_Provider(Provider):
     def training_count(self, training_plan_response) -> float:
-        trainings = json.loads(training_plan_response)
-        trainings_counted = len(trainings)
-
+        try:
+            trainings = json.loads(training_plan_response)
+            trainings_counted = len(trainings)
+        except json.JSONDecodeError:
+            return 0.0
+        
         trainings_length = float(
             gemini_pro.complete(
                 f"""Rate the number. It should be 7, and the results is: {trainings_counted}. Respond with the float likelihood from 0.0 (number far from 7) to 1.0 (7) """
@@ -80,9 +85,6 @@ def generate_plans():
     # Use the prompt with your TruLens application.
     with tru_gemini as recording:
         result = gemini.complete(prompt=exercise_plan_prompt)
-
-    # Run the TruLens dashboard.
-    tru.run_dashboard(port=8024)
 
     return {'message': result }, 200
 
