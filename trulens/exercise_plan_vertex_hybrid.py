@@ -67,7 +67,7 @@ class Gemini_Provider(Provider):
         except json.JSONDecodeError:
             return 0.0
 
-        trainings_length = trainings_length = float(
+        trainings_length = float(
             gemini_pro_text(
                 f"""Rate the number. It should be 7, and the results is: {trainings_counted}. Respond with the float likelihood from 0.0 (number far from 7) to 1.0 (7) """
             )
@@ -106,6 +106,20 @@ def generate_plans():
     # Use the prompt with your TruLens application.
     with tru_gemini as recording:
         result = gemini.complete(prompt=exercise_plan_prompt)
+
+    # At this point it would be nice to have a way to check the result from the feedback function
+    # but it may not be possible at the moment, as it's some kind of an async function
+    # However, it could give a real time feedback to the user, and improve the overall UX
+    # If the the feedback function returns a value that is not 1.0, then the user could be notified
+    # that the result is not correct, and they should try again
+        try:
+            trainings = json.loads(result)
+            trainings_counted = len(trainings)
+        except json.JSONDecodeError:
+            return {'message': 'Response was incorrect, please try again'}, 400
+        
+        if trainings_counted != 7:
+            return {'message': 'The number of trainings should be 7.'}, 400
 
     return {'message': result }, 200
 
