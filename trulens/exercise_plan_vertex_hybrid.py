@@ -68,7 +68,7 @@ class Gemini_Provider(Provider):
             return 0.0
 
         trainings_length = trainings_length = float(
-            gemini_pro_text.complete(
+            gemini_pro_text(
                 f"""Rate the number. It should be 7, and the results is: {trainings_counted}. Respond with the float likelihood from 0.0 (number far from 7) to 1.0 (7) """
             )
         )
