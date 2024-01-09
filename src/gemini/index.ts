@@ -85,10 +85,6 @@ export const sendMultiModalPromptWithImage = async (
 
     const generativeVisionModel = vertexAI.preview.getGenerativeModel({
       model,
-      generation_config: {
-        max_output_tokens: 2048,
-        temperature: 0.3,
-      },
     });
 
     const textPart = {
