@@ -26,7 +26,7 @@ export const createNonStreamingSinglePartContent = async (prompt: string) => {
       model,
       generation_config: {
         max_output_tokens: 8192,
-        temperature: 0.1,
+        temperature: 0.2,
       },
     });
 
@@ -87,7 +87,7 @@ export const sendMultiModalPromptWithImage = async (
       model,
       generation_config: {
         max_output_tokens: 2048,
-        temperature: 0.1,
+        temperature: 0.3,
       },
     });
 
@@ -142,7 +142,7 @@ export const sendMultiModalPromptWithVideo = async (
       model,
       generation_config: {
         max_output_tokens: 2048,
-        temperature: 0.1,
+        temperature: 0.3,
       },
     });
 
