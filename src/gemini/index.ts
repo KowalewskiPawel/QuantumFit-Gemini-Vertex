@@ -24,6 +24,10 @@ export const createNonStreamingSinglePartContent = async (prompt: string) => {
     // Instantiate the model
     const generativeVisionModel = vertexAI.preview.getGenerativeModel({
       model,
+      generation_config: {
+        max_output_tokens: 8192,
+        temperature: 0.1,
+      },
     });
 
     const textPart = {
@@ -81,6 +85,10 @@ export const sendMultiModalPromptWithImage = async (
 
     const generativeVisionModel = vertexAI.preview.getGenerativeModel({
       model,
+      generation_config: {
+        max_output_tokens: 2048,
+        temperature: 0.1,
+      },
     });
 
     const textPart = {
@@ -132,6 +140,10 @@ export const sendMultiModalPromptWithVideo = async (
 
     const generativeVisionModel = vertexAI.preview.getGenerativeModel({
       model,
+      generation_config: {
+        max_output_tokens: 2048,
+        temperature: 0.1,
+      },
     });
 
     const videoBase64 = await getBase64(videoUrl);
